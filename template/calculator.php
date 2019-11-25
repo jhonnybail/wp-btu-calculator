@@ -11,6 +11,14 @@
         display: none;
     }
 
+    #ar-result-1-aparelho {
+        display: none;
+    }
+
+    #ar-result-mais-aparelho {
+        display: none;
+    }
+
     .ar-result h3 {
         margin-top: 0px;
     }
@@ -23,7 +31,10 @@
 <script>
     function calcule(m2, janelas, eletronicos, pessoas) {
         let btu = 0;
-        let btus = [9000, 12000, 18000, 20000, 22000, 30000];
+        let btus = [9000, 12000, 18000, 20000, 22000, 24000, 30000, 36000, 48000, 60000, 80000];
+
+        for (let k = 100000; k <= 2000000; k += 20000)
+            btus.push(k);
 
         btu += (m2 * 600);
         btu += (janelas * 200);
@@ -34,7 +45,7 @@
             if (btu <= option + 500) return option;
         }
 
-        return btus[btus.length-1];
+        return btus[btus.length - 1];
     }
 
     function showResult() {
@@ -44,15 +55,22 @@
         let pessoas = document.getElementById('ar-data-pessoa').value;
         let btu = calcule(m2, janelas, eletronicos, pessoas);
 
-        document.getElementById('ar-form').style            = 'display: none';
-        document.getElementById('ar-result').style          = 'display: block';
+        document.getElementById('ar-form').style = 'display: none';
+        document.getElementById('ar-result').style = 'display: block';
         document.getElementById("ar-result-btus").innerHTML = btu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        if (btu > 80000)
+            document.getElementById('ar-result-mais-aparelho').style = 'display: block';
+        else
+            document.getElementById('ar-result-1-aparelho').style = 'display: block';
 
     }
 
     function recalculate() {
         document.getElementById('ar-form').style = 'display: block';
         document.getElementById('ar-result').style = 'display: none';
+        document.getElementById('ar-result-1-aparelho').style = 'display: none';
+        document.getElementById('ar-result-mais-aparelho').style = 'display: none';
     }
 </script>
 
@@ -85,7 +103,8 @@
 </form>
 
 <div class="ar-result" id="ar-result">
-    <p>Seu ar condicionado ideal deve ter aproximadamente:</p>
+    <p id="ar-result-1-aparelho">Seu ar condicionado ideal deve ter aproximadamente:</p>
+    <p id="ar-result-mais-aparelho">Parece que você possui uma área muito grande, será necessário a instalação de mais aparelhos, totalizando o valor de:</p>
     <h3><span id="ar-result-btus"></span> <span>BTUs</span></h3>
     <p><a onclick="recalculate();">Recalcular</a></p>
 </div>
